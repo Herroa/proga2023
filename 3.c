@@ -6,6 +6,7 @@ int main()
 {
     int y = 5;
     int z = SQR((y + 1));
+    //sqr()
     printf("z = %d\n", z);
     return 0;
 }

@@ -8,6 +8,7 @@ void init(int** arr, int n)
     {
         (*arr)[i] = i;
     }
+    //razymenovyvaem vezde
 }
 int main()
 {
@@ -15,6 +16,7 @@ int main()
     int n = 10;
 
     init(&arr, n);
+    //peredaem adress arr
     int i;
     for (i = 0; i < n; ++i)
     {
