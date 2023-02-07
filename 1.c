@@ -9,6 +9,7 @@ void init(int** arr, int n)
         (*arr)[i] = i;
     }
     //razymenovyvaem vezde
+    //tut drugoi arr
 }
 int main()
 {
