@@ -9,15 +9,15 @@ void bubble_sort(int* array, int size)
 {
     int i, j;
     for (i = 0; i < size - 1; ++i) {
-        for (j = 0; j < size - 1 - i; ++j) {
-            // -1
+        for (j = 0; j < size - i - 1; ++j) {
+            // -1 ogranichivaem cicle
             if (array[j] > array[j + 1]) {
                 swap(&array[j], &array[j + 1]);
             }
         }
     }
 }
-//vyhodit za ramki peretaskivaet nuli, nado ogranichit
+
 int main()
 {
     int array[100] = {10, 15, 5, 4, 21, 7};
