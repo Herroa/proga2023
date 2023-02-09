@@ -3,8 +3,8 @@
 typedef struct
 {
     int num;
-    char str[3];
-//stavim samoe bolshoe pole v nachalo
+    char str[100];
+//stavim stroku v konec, i luchshe vydelit bolshe pamiati
 } NumberRepr;
 
 void format(NumberRepr* number)
