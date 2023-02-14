@@ -4,7 +4,7 @@ typedef struct
 {
     int num;
     char str[100];
-//stavim stroku v konec, i luchshe vydelit bolshe pamiati
+//allocate more memory and rearrange the line to the end
 } NumberRepr;
 
 void format(NumberRepr* number)
