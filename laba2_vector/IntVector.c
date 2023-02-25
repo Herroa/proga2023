@@ -15,7 +15,7 @@ IntVector *int_vector_new(size_t initial_capacity)
         return NULL;
     }
     v->capacity = initial_capacity;
-    v->size = initial_capacity;
+    v->size = initial_capacity/2;
     return v;
 }
 
@@ -114,12 +114,18 @@ void int_vector_pop_back(IntVector *v)
 int int_vector_shrink_to_fit(IntVector *v)
 {
     if(v->size < v->capacity){
+        IntVector *v2 = int_vector_copy(v);
         v->data = realloc(v->data,v->size);
         if(v->data == NULL){
+            free(v2);
             return -1;
         }
         else{
+            for(int i = 0;i<v->size;i++){
+                v->data[i] = v2->data[i];
+            }
             v->capacity = v->size;
+            free(v2);
             return 0;
         }
     }

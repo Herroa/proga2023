@@ -26,7 +26,7 @@ int main()
     // int_vector_set_item(array, 5, 100);
     // printf("%zu\n",int_vector_get_size(array));
     // printf("%zu\n",int_vector_get_capacity(array));
-    printf("%d\n",int_vector_push_back(array, 111));
+    // printf("%d\n",int_vector_push_back(array, 111));
     // int_vector_pop_back(array);
     
     // int_vector_resize(array, 10);
