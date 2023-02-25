@@ -4,12 +4,12 @@ IntVector *int_vector_new(size_t initial_capacity)
 {  
     IntVector *v = NULL;
     v = malloc(sizeof(*v));
-    if(!v){
+    if(v == NULL){
         return NULL;
     }
 
     v->data = malloc(initial_capacity * sizeof(int));
-    if(!v->data)
+    if(v->data == NULL)
     {
         free(v);
         return NULL;
@@ -22,7 +22,7 @@ IntVector *int_vector_new(size_t initial_capacity)
 void int_vector_free(IntVector *v)
 {
     free(v->data);
-    free(v);
+    // free(v);
 }
 
 int int_vector_get_item(const IntVector *v, size_t index)
@@ -62,7 +62,7 @@ int int_vector_push_back(IntVector *v, int item)
     else{
         v->capacity *= 2;
         v->data = realloc(v->data, v->capacity);
-        if(!(v->data)){
+        if(v->data == NULL){
             return -1;
         }
         else{
@@ -84,27 +84,52 @@ void int_vector_pop_back(IntVector *v)
 
 int int_vector_shrink_to_fit(IntVector *v)
 {
-    v->data = realloc(v->data,v->size);
-    if(!(v->data)){
-        return -1;
+    if(v->size < v->capacity){
+        v->data = realloc(v->data,v->size);
+        if(v->data == NULL){
+            return -1;
+        }
+        else{
+            v->capacity = v->size;
+            return 0;
+        }
     }
     else{
-        v->capacity = v->size;
-        return 0;
+        return -1;
+    }
+}   
+
+//realloc doesnt save half of data with big data
+
+int int_vector_resize(IntVector *v, size_t new_size)
+{
+    if((new_size > v->size) && (new_size < v->capacity)){
+        v->data = calloc(new_size, sizeof(int));
+        if(v->data == NULL){
+            return -1;
+        }
+        else{
+            return 0;
+        }
+    }
+    else{
+        int_vector_shrink_to_fit(v);
     }
 }
-//realloc doesnt save half of data
-
-
 
 int int_vector_reserve(IntVector *v, size_t new_capacity)
-{
-    v->data = realloc(v->data, new_capacity);
-    if(!(v->data)){
-        return -1;
+{   
+    if(new_capacity <= v->capacity){
+        v->data = realloc(v->data, new_capacity);
+        if(v->data == NULL){
+            return -1;
+        }
+        else{
+            v->capacity = new_capacity;
+            return 0;
+        }
     }
     else{
-        v->capacity = new_capacity;
-        return 0;
+        return -1;
     }
 }
