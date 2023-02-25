@@ -19,6 +19,29 @@ IntVector *int_vector_new(size_t initial_capacity)
     return v;
 }
 
+IntVector *int_vector_copy(const IntVector *v)
+{
+    IntVector *v2 = NULL;
+    v2 = malloc(sizeof(*v));
+    if(v2 == NULL){
+        return NULL;
+    }
+
+    v2->data = malloc(v->capacity * sizeof(int));
+    if(v2->data == NULL)
+    {
+        free(v2);
+        return NULL;
+    }
+    
+    for(int i = 0;i<v->capacity;i++){
+        v2->data[i] = v->data[i];
+    }
+    v2->capacity = v->capacity;
+    v2->size = v->size;
+    return v2;
+}
+
 void int_vector_free(IntVector *v)
 {
     free(v->data);
@@ -121,7 +144,7 @@ int int_vector_resize(IntVector *v, size_t new_size)
 
 int int_vector_reserve(IntVector *v, size_t new_capacity)
 {   
-    if(new_capacity <= v->capacity){
+    if(new_capacity > v->capacity){
         v->data = realloc(v->data, new_capacity);
         if(v->data == NULL){
             return -1;
