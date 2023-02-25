@@ -21,11 +21,13 @@ int main()
     } printf("\n");
     // int_vector_free(array);
     print(array);
-    // printf("%d\n",int_vector_push_back(array, 10));
+    printf("%d\n",int_vector_push_back(array, 111));
     // printf("%d\n", int_vector_get_item(array,4));
-    int_vector_pop_back(array);
-    print(array);
     // int_vector_set_item(array, 5, 100);
+    // int_vector_pop_back(array);
+    // int_vector_shrink_to_fit(array);
+    print(array);
+    
     
     return 0;
 }

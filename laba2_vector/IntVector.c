@@ -55,8 +55,8 @@ int int_vector_push_back(IntVector *v, int item)
         return 0;
     }
     else{
-        v->capacity += 1;
-        v = realloc(v, v->capacity);
+        v->capacity *= 2;
+        v->data = realloc(v->data, v->capacity);
         if(!v){
             return -1;
         }
@@ -66,7 +66,6 @@ int int_vector_push_back(IntVector *v, int item)
         }
     }
 }
-// +8, idk, we need to rerurn v, how we can reallocate without returning v
 
 void int_vector_pop_back(IntVector *v)
 {
@@ -78,4 +77,17 @@ void int_vector_pop_back(IntVector *v)
 }
 //delete >0?
 
+int int_vector_shrink_to_fit(IntVector *v)
+{
+    v->capacity = v->size;
+    v->data = realloc(v->data,v->size);
+    if(!v){
+        v->capacity = v->size;
+        return -1;
+    }
+    else{
+        return 0;
+    }
+}
+//realloc doesnt save half of data
 
