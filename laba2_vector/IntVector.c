@@ -15,7 +15,7 @@ IntVector *int_vector_new(size_t initial_capacity)
         return NULL;
     }
     v->capacity = initial_capacity;
-    v->size = initial_capacity;
+    v->size = initial_capacity/2;
     return v;
 }
 
@@ -99,17 +99,17 @@ int int_vector_shrink_to_fit(IntVector *v)
     }
 }   
 
-//realloc doesnt save half of data with big data
+//realloc doesnt save half of data
 
 int int_vector_resize(IntVector *v, size_t new_size)
 {
     if((new_size > v->size) && (new_size < v->capacity)){
         v->data = calloc(new_size, sizeof(int));
         if(v->data == NULL){
-            v->size = new_size;
             return -1;
         }
         else{
+            v->size = new_size;
             return 0;
         }
     }
