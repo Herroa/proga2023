@@ -15,7 +15,7 @@ IntVector *int_vector_new(size_t initial_capacity)
         return NULL;
     }
     v->capacity = initial_capacity;
-    v->size = initial_capacity/2;
+    v->size = initial_capacity;
     return v;
 }
 
@@ -34,7 +34,7 @@ IntVector *int_vector_copy(const IntVector *v)
         return NULL;
     }
     
-    for(int i = 0;i<v->capacity;i++){
+    for(int i = 0;i<v->size;i++){
         v2->data[i] = v->data[i];
     }
     v2->capacity = v->capacity;
@@ -83,12 +83,18 @@ int int_vector_push_back(IntVector *v, int item)
         return 0;
     }
     else{
+        IntVector *v2 = int_vector_copy(v);
         v->capacity *= 2;
         v->data = realloc(v->data, v->capacity);
         if(v->data == NULL){
+            free(v2);
             return -1;
         }
         else{
+            for(int i = 0;i<v->size;i++){
+                v->data[i] = v2->data[i];
+            }
+            free(v2);
             v->data[v->size++] = item;
             return 0;
         }
