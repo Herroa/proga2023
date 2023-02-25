@@ -106,6 +106,7 @@ int int_vector_resize(IntVector *v, size_t new_size)
     if((new_size > v->size) && (new_size < v->capacity)){
         v->data = calloc(new_size, sizeof(int));
         if(v->data == NULL){
+            v->size = new_size;
             return -1;
         }
         else{
@@ -114,6 +115,7 @@ int int_vector_resize(IntVector *v, size_t new_size)
     }
     else{
         int_vector_shrink_to_fit(v);
+        return -1;
     }
 }
 
