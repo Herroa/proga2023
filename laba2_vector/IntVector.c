@@ -87,14 +87,14 @@ int int_vector_push_back(IntVector *v, int item)
         v->capacity *= 2;
         v->data = realloc(v->data, v->capacity);
         if(v->data == NULL){
-            free(v2);
+            free(v2->data);
             return -1;
         }
         else{
             for(int i = 0;i<v->size;i++){
                 v->data[i] = v2->data[i];
             }
-            free(v2);
+            free(v2->data);
             v->data[v->size++] = item;
             return 0;
         }
@@ -116,7 +116,7 @@ int int_vector_shrink_to_fit(IntVector *v)
         IntVector *v2 = int_vector_copy(v);
         v->data = realloc(v->data,v->size);
         if(v->data == NULL){
-            free(v2);
+            free(v2->data);
             return -1;
         }
         else{
@@ -124,7 +124,7 @@ int int_vector_shrink_to_fit(IntVector *v)
                 v->data[i] = v2->data[i];
             }
             v->capacity = v->size;
-            free(v2);
+            free(v2->data);
             return 0;
         }
     }
@@ -140,7 +140,7 @@ int int_vector_resize(IntVector *v, size_t new_size)
         IntVector *v2 = int_vector_copy(v);
         v->data = calloc(new_size, sizeof(int));
         if(v->data == NULL){
-            free(v2);
+            free(v2->data);
             return -1;
         }
         else{
@@ -148,7 +148,7 @@ int int_vector_resize(IntVector *v, size_t new_size)
                 v->data[i] = v2->data[i];
             }
             v->size = new_size;
-            free(v2);
+            free(v2->data);
             return 0;
         }
     }
@@ -170,6 +170,7 @@ int int_vector_reserve(IntVector *v, size_t new_capacity)
             for(int i = 0;i<v->size;i++){
                 v->data[i] = v2->data[i];
             }
+            free(v2->data);
             v->capacity = new_capacity;
             return 0;
         }
