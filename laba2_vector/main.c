@@ -14,18 +14,19 @@ void print(IntVector *array)
 
 int main()
 {   
-    size_t capacity = 15;
+    size_t capacity = 5;
     IntVector *array = int_vector_new(capacity);
     for(int i = 0;i < array->size;i++){
         array->data[i] = i;
     } printf("\n");
     // int_vector_free(array);
     print(array);
-    printf("%d\n",int_vector_push_back(array, 111));
+    // printf("%d\n",int_vector_push_back(array, 111));
     // printf("%d\n", int_vector_get_item(array,4));
     // int_vector_set_item(array, 5, 100);
     // int_vector_pop_back(array);
-    // int_vector_shrink_to_fit(array);
+    // printf("%d\n",int_vector_shrink_to_fit(array));
+    int_vector_reserve(array, 10);
     print(array);
     
     

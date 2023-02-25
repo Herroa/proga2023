@@ -27,7 +27,12 @@ void int_vector_free(IntVector *v)
 
 int int_vector_get_item(const IntVector *v, size_t index)
 {
-    return v->data[index];
+    if(index < v->size){
+        return v->data[index];
+    }
+    else{
+        return -1;
+    }
 } 
 
 void int_vector_set_item(IntVector *v, size_t index, int item)
@@ -57,14 +62,14 @@ int int_vector_push_back(IntVector *v, int item)
     else{
         v->capacity *= 2;
         v->data = realloc(v->data, v->capacity);
-        if(!v){
+        if(!(v->data)){
             return -1;
         }
         else{
             v->data[v->size++] = item;
             return 0;
         }
-    }
+    } 
 }
 
 void int_vector_pop_back(IntVector *v)
@@ -79,15 +84,27 @@ void int_vector_pop_back(IntVector *v)
 
 int int_vector_shrink_to_fit(IntVector *v)
 {
-    v->capacity = v->size;
     v->data = realloc(v->data,v->size);
-    if(!v){
-        v->capacity = v->size;
+    if(!(v->data)){
         return -1;
     }
     else{
+        v->capacity = v->size;
         return 0;
     }
 }
 //realloc doesnt save half of data
 
+
+
+int int_vector_reserve(IntVector *v, size_t new_capacity)
+{
+    v->data = realloc(v->data, new_capacity);
+    if(!(v->data)){
+        return -1;
+    }
+    else{
+        v->capacity = new_capacity;
+        return 0;
+    }
+}
