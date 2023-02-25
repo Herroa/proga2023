@@ -15,7 +15,7 @@ IntVector *int_vector_new(size_t initial_capacity)
         return NULL;
     }
     v->capacity = initial_capacity;
-    v->size = initial_capacity/2;
+    v->size = initial_capacity;
     return v;
 }
 
@@ -32,9 +32,11 @@ int int_vector_get_item(const IntVector *v, size_t index)
 
 void int_vector_set_item(IntVector *v, size_t index, int item)
 {
-    v->data[index] = item;
+    if(index < v->size){
+        v->data[index] = item;
+    }
 }
-//undefined
+
 
 size_t int_vector_get_size(const IntVector *v)
 {
@@ -50,11 +52,30 @@ int int_vector_push_back(IntVector *v, int item)
 {
     if(v->size < v->capacity){
         v->data[v->size++] = item;
+        return 0;
     }
     else{
         v->capacity += 1;
         v = realloc(v, v->capacity);
-        v->data[v->size++] = item;
+        if(!v){
+            return -1;
+        }
+        else{
+            v->data[v->size++] = item;
+            return 0;
+        }
     }
 }
-// +8
+// +8, idk, we need to rerurn v, how we can reallocate without returning v
+
+void int_vector_pop_back(IntVector *v)
+{
+    if(v->size != 0)
+    {
+        v->data[v->size] = 0;
+        v->size--;
+    }
+}
+//delete >0?
+
+
