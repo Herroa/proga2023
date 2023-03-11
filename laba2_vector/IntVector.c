@@ -120,28 +120,38 @@ int int_vector_shrink_to_fit(IntVector *v)
 
 int int_vector_resize(IntVector *v, size_t new_size)
 {
-    if((new_size > v->size) && (new_size < v->capacity)){
-        IntVector *v2 = int_vector_copy(v);
-        v->data = calloc(new_size, sizeof(int));
-        if(v->data == NULL){
-            free(v2->data);
-            free(v2);
+    if(new_size > v->capacity){
+        if(int_vector_reserve(v,new_size) == -1){
             return -1;
         }
-        else{
-            for(int i = 0;i<v->size;i++){
-                v->data[i] = v2->data[i];
-            }
-            v->size = new_size;
-            free(v2->data);
-            free(v2);
-            return 0;
-        }
     }
-    else{
-        int_vector_shrink_to_fit(v);
-        return -1;
+    for(int i = v->size;i<new_size;i++){
+        v->data[i] = 0;
     }
+    v->size = new_size;
+    return 0;   
+        // IntVector *v2 = int_vector_copy(v);
+        // v->data = calloc(new_size, sizeof(int));
+        // if(v->data == NULL){
+        //     free(v2->data);
+        //     free(v2);
+        //     return -1;
+        // }
+        // else{
+        //     for(int i = 0;i<v->size;i++){
+        //         v->data[i] = v2->data[i];
+        //     }
+        //     v->size = new_size;
+        //     free(v2->data);
+        //     free(v2);
+        //     return 0;
+        // }
+
+        // else{
+        //     int_vector_shrink_to_fit(v);
+        //     return -1;
+        // }
+
 }
 
 int int_vector_reserve(IntVector *v, size_t new_capacity)
