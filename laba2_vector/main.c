@@ -20,7 +20,6 @@ int main()
         array->data[i] = i;
     } printf("\n");
     print(array);
-    // int_vector_copy(array);
     // int_vector_free(array);
     // printf("%d\n", int_vector_get_item(array,4));
     // int_vector_set_item(array, 5, 100);
@@ -31,7 +30,7 @@ int main()
     // printf("%d\n",int_vector_shrink_to_fit(array));
     // int_vector_resize(array, 10);
     // printf("%d\n",int_vector_reserve(array, 200));
-    print(array);
+    print(int_vector_copy(array));
     int_vector_free(array);
     return 0;
 }

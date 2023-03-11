@@ -21,22 +21,13 @@ IntVector *int_vector_new(size_t initial_capacity)
 
 IntVector *int_vector_copy(const IntVector *v)
 {
-    IntVector *v2 = NULL;
-    v2 = malloc(sizeof(*v));
+    IntVector *v2 = int_vector_new(v->capacity);
     if(v2 == NULL){
-        return NULL;
-    }
-
-    v2->data = malloc(v->capacity * sizeof(int));
-    if(v2->data == NULL)
-    {
-        free(v2);
         return NULL;
     }
     
     for(int i = 0;i<v->size;i++){
-        v2->data[i] = v->data[i];
-    }
+        v2->data[i] = v->data[i];}
     v2->capacity = v->capacity;
     v2->size = v->size;
     return v2;
