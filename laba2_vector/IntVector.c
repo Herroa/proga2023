@@ -110,6 +110,7 @@ int int_vector_shrink_to_fit(IntVector *v)
             return -1;
         }
         v->data = new_data;
+        v->capacity = v->size;
         return 0;
     }
     else{

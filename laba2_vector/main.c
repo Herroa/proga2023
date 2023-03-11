@@ -29,7 +29,7 @@ int main()
     // int_vector_pop_back(array);
     // printf("%d\n",int_vector_shrink_to_fit(array));
     // int_vector_resize(array, 3);
-    printf("%d\n",int_vector_reserve(array, 20));
+    printf("%d\n",int_vector_reserve(array, 3));
     print(array);
     // int_vector_free(array);
     return 0;
