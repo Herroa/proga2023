@@ -28,8 +28,8 @@ int main()
     // printf("%d\n",int_vector_push_back(array, 111));
     // int_vector_pop_back(array);
     // printf("%d\n",int_vector_shrink_to_fit(array));
-    int_vector_resize(array, 3);
-    // printf("%d\n",int_vector_reserve(array, 200));
+    // int_vector_resize(array, 3);
+    printf("%d\n",int_vector_reserve(array, 20));
     print(array);
     // int_vector_free(array);
     return 0;
