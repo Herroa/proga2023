@@ -98,7 +98,6 @@ void int_vector_pop_back(IntVector *v)
 {
     if(v->size != 0)
     {
-        v->data[v->size] = 0;
         v->size--;
     }
 }
@@ -106,22 +105,12 @@ void int_vector_pop_back(IntVector *v)
 int int_vector_shrink_to_fit(IntVector *v)
 {
     if(v->size < v->capacity){
-        IntVector *v2 = int_vector_copy(v);
-        v->data = realloc(v->data,v->size);
-        if(v->data == NULL){
-            free(v2->data);
-            free(v2);
+        int * new_data = realloc(v->data,v->size*(sizeof(int)));
+        if(new_data == NULL){
             return -1;
         }
-        else{
-            for(int i = 0;i<v->size;i++){
-                v->data[i] = v2->data[i];
-            }
-            v->capacity = v->size;
-            free(v2->data);
-            free(v2);
-            return 0;
-        }
+        v->data = new_data;
+        return 0;
     }
     else{
         return -1;
@@ -159,7 +148,7 @@ int int_vector_reserve(IntVector *v, size_t new_capacity)
 {   
     if(new_capacity > v->capacity){
         IntVector *v2 = int_vector_copy(v);
-        v->data = realloc(v->data, new_capacity);
+        v->data = realloc(v->data, new_capacity*sizeof(int));
         if(v->data == NULL){
             free(v2->data);
             free(v2);

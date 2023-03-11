@@ -27,10 +27,10 @@ int main()
     // printf("%zu\n",int_vector_get_capacity(array));
     // printf("%d\n",int_vector_push_back(array, 111));
     // int_vector_pop_back(array);
-    // printf("%d\n",int_vector_shrink_to_fit(array));
+    printf("%d\n",int_vector_shrink_to_fit(array));
     // int_vector_resize(array, 10);
     // printf("%d\n",int_vector_reserve(array, 200));
-    print(int_vector_copy(array));
-    int_vector_free(array);
+    print(array);
+    // int_vector_free(array);
     return 0;
 }
