@@ -15,7 +15,7 @@ IntVector *int_vector_new(size_t initial_capacity)
         return NULL;
     }
     v->capacity = initial_capacity;
-    v->size = initial_capacity/2;
+    v->size = 0;
     return v;
 }
 
@@ -69,29 +69,13 @@ size_t int_vector_get_capacity(const IntVector *v)
 
 int int_vector_push_back(IntVector *v, int item)
 {
-    if(v->size < v->capacity){
-        v->data[v->size++] = item;
-        return 0;
-    }
-    else{
-        IntVector *v2 = int_vector_copy(v);
-        v->capacity *= 2;
-        v->data = realloc(v->data, v->capacity);
-        if(v->data == NULL){
-            free(v2->data);
-            free(v2);
+    if(v->size >= v->capacity){
+        if(int_vector_reserve(v,v->capacity *= 2) == -1){
             return -1;
-        }
-        else{
-            for(int i = 0;i<v->size;i++){
-                v->data[i] = v2->data[i];
-            }
-            free(v2->data);
-            free(v2);
-            v->data[v->size++] = item;
-            return 0;
-        }
-    } 
+        }  
+    }
+    v->data[v->size++] = item;
+    return 0;
 }
 
 void int_vector_pop_back(IntVector *v)
