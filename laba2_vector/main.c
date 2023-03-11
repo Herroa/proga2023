@@ -31,9 +31,7 @@ int main()
     // printf("%d\n",int_vector_shrink_to_fit(array));
     // int_vector_resize(array, 10);
     // printf("%d\n",int_vector_reserve(array, 200));
-
     print(array);
-    
-    
+    int_vector_free(array);
     return 0;
 }

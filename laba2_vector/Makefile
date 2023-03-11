@@ -1,5 +1,6 @@
-all: main
-
+run: main
+	./main
+	
 main: main.o IntVector.o
 	gcc -Wall main.o IntVector.o -o main
 
