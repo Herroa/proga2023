@@ -1,4 +1,4 @@
-#include "IntVector.h"
+    #include "IntVector.h"
 
 IntVector *int_vector_new(size_t initial_capacity)
 {  
@@ -43,9 +43,6 @@ int int_vector_get_item(const IntVector *v, size_t index)
 {
     if(index < v->size){
         return v->data[index];
-    }
-    else{
-        return -1;
     }
 } 
 
