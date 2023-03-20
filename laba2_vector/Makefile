@@ -4,11 +4,11 @@ run: main
 main: main.o IntVector.o
 	gcc -Wall main.o IntVector.o -o main
 
-main.o: main.c
-	gcc -Wall -c main.c
+main.o: src/main.c
+	gcc -Wall -c src/main.c
 
-IntVector.o: IntVector.c
-	gcc -Wall -c IntVector.c
+IntVector.o: src/IntVector.c
+	gcc -Wall -c src/IntVector.c
 
 clean:
 	rm -rf *.o main
