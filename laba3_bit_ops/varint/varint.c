@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <stdlib.h>
+#define SIZE 10
 
 /*
  * Диапазон             Вероятность
@@ -31,6 +32,7 @@ void print_bin(unsigned char x){
     for(int i=0;i<8;i++){
         printf("%d", (x >> (7-i)) & 1);
     }
+    printf("\n");
 }
 
 size_t encode_varint(uint32_t value, uint8_t* buf)
@@ -65,26 +67,29 @@ uint32_t decode_varint(const uint8_t** bufp)
 
 int main()
 {
-    // long int x = 5;
-    // print_bin(x);
-    FILE *uncompressed, *compressed;
-    uncompressed = fopen("uncompressed.dat", "w");
-    compressed = fopen("compressed.dat","w");
+    FILE *uncompressed;
+    uncompressed = fopen("uncompressed.dat", "wb");
+    uint32_t values[SIZE];
+    for(int i = 0; i<SIZE; i++){
+        values[i] = generate_number();
+    }//fill array
 
-    uint32_t x;
-    uint8_t* buf = NULL;
-    for(int i = 0; i< 10;i++){
-        x = generate_number();  
-        for(int i=0;i<8;i++){
-            fprintf(uncompressed, "%d", (x >> (7-i)) & 1);
-        }
-
-
-    }
-    
-
-
+    fwrite(values,sizeof(uint32_t),SIZE,uncompressed);
+    //write file
     fclose(uncompressed);
+
+
+    FILE *compressed;
+
+    compressed = fopen("compressed.dat","wb");
+
+    uint8_t buf[4];
+    size_t size = 0;
+
+    for (int i = 0; i<SIZE;i++){
+        size = encode_varint(values[i], buf);
+        fwrite(buf,sizeof(uint8_t),size,compressed);
+    }
     fclose(compressed);
     return 0;
 }
