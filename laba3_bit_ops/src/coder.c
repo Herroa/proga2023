@@ -48,74 +48,31 @@ int read_next_code_unit(FILE *in, CodeUnit *code_unit)
     uint8_t byte;
     fread(&byte, sizeof(uint8_t), 1, in);
 
-    if(byte<0x80){
+    if(byte < 0x80){
         code_unit -> length = 1;
-        code_unit -> code[0] = byte;
-        return 0;
-    }
-    else if(byte < 0xe0){
-        //111xxxxx
-        code_unit -> length = 2;
-        code_unit -> code[0] = byte;
-        fread(&byte, sizeof(uint8_t), 1, in);
-        if(byte < 0xc0){
-            //11xxxxxx
-            code_unit -> code[1] = byte;
-        }
-        else{
-            printf("bitiy");
-        }
-        return 0;
-    }
-    else if(byte < 0xf0){
-        //1111xxxx
-        code_unit -> length = 3;
-        code_unit -> code[0] = byte;
-        fread(&byte, sizeof(uint8_t), 1, in);
-        if(byte < 0xc0){
-            code_unit -> code[1] = byte;
-            fread(&byte, sizeof(uint8_t), 1, in);
-            if(byte < 0xc0){
-                code_unit -> code[2] = byte;
-            }
-            else{
-                printf("bitiy");
-            }
-        }
-        else{
-            printf("bitiy");
-        }
-        return 0;
-    }
-    else if(byte < 0xf8){
-        //11111xxx
-        code_unit -> length = 4;
-        code_unit -> code[0] = byte;
-        fread(&byte, sizeof(uint8_t), 1, in);
-        if(byte < 0xc0){
-            code_unit -> code[1] = byte;
-            fread(&byte, sizeof(uint8_t), 1, in);
-            if(byte < 0xc0){
-                code_unit -> code[2] = byte;
-                fread(&byte, sizeof(uint8_t), 1, in);
-                if(byte < 0xc0){
-                    code_unit -> code[3] = byte;
-                }
-                else{
-                    printf("bitiy");
-                }
-            }
-            else{
-                printf("bitiy");
-            }
-        }
-        else{
-            printf("bitiy");
-        }
-        return 0;
     }
     else{
-        read_next_code_unit(in, code_unit);
-        return -1;
+        if (code_unit->code[0] < 0xc0)
+        //10xx xxxx
+            return read_next_code_unit(in, code_unit);
+        else if (code_unit->code[0] < 0xe0)
+        //110x xxxx
+            code_unit->length = 2;
+        else if (code_unit->code[0] < 0xf0)
+        //1110 xxxx
+            code_unit->length = 3;
+        else if (code_unit->code[0] < 0xf8)
+        //1111 0xxx
+            code_unit->length = 4;
+        for (size_t i = 1; i < code_unit->length; i++){
+            byte = fread(&code_unit->code[i], sizeof(uint8_t), 1, in);
+            if (code_unit->code[i] >> 6 != 2)
+            //xxxx xx10
+                return read_next_code_unit(in, code_unit);
+        }
+        if (code_unit->length == 0)
+            return read_next_code_unit(in, code_unit);
     }
+    return 0;
 }
+
