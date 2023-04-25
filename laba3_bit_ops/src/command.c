@@ -7,24 +7,23 @@ int encode_file(const char *in_file_name, const char *out_file_name)
     FILE *out;
     in = fopen(in_file_name,"r");
     if(!in){
-        printf("in isnt open");
+        printf("Input file not found\n");
         return -1;
     }
     out = fopen(out_file_name,"wb");
     if(!out){
-        printf("out isnt open");
+        printf("Output file isn't open\n");
         return -1;
     }
 
     uint32_t code_point;
-    // for(int i=0;i<4;i++){
     while(!feof(in)){
         fscanf(in, "%" SCNx32, &code_point);
         printf("%" PRIx32 "\n", code_point);
 
         CodeUnit code_unit;
-        if(encode(code_point, &code_unit) ==  -1){
-            printf("encode error\n ");
+        if(encode(code_point, &code_unit) < 0){
+            printf("Encode error\n ");
             return -1;
         }
 
@@ -33,5 +32,26 @@ int encode_file(const char *in_file_name, const char *out_file_name)
     fclose(in);
     fclose(out);
 
+    return 0;
+}
+
+int decode_file(const char *in_file_name, const char *out_file_name)
+{
+    FILE *in;
+    FILE *out;
+    in = fopen(in_file_name,"rb");
+    if(!in){
+        printf("Input file not found\n");
+        return -1;
+    }
+    out = fopen(out_file_name,"w");
+    if(!out){
+        printf("Output file isn't open\n");
+        return -1;
+    }
+
+    CodeUnit code_unit;
+    read_next_code_unit(in, &code_unit);
+    decode(&code_unit);
     return 0;
 }
