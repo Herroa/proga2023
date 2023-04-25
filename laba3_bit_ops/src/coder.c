@@ -45,10 +45,13 @@ int write_code_unit(FILE *out, const CodeUnit *code_unit)
 
 int read_next_code_unit(FILE *in, CodeUnit *code_unit)
 {
-    uint8_t byte;
-    fread(&byte, sizeof(uint8_t), 1, in);
+    code_unit->length = 0;
+    size_t byte = fread(&code_unit->code[0], sizeof(uint8_t), 1, in);
+    if (byte != 1){
+        return -1;
+    }
 
-    if(byte < 0x80){
+    if(code_unit->code[0] < 0x80){
         code_unit -> length = 1;
     }
     else{
