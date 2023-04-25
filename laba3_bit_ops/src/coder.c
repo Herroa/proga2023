@@ -76,3 +76,40 @@ int read_next_code_unit(FILE *in, CodeUnit *code_unit)
     return 0;
 }
 
+uint32_t decode(const CodeUnit *code_unit)
+{
+    uint32_t value = 0;
+    if (code_unit->length == 1){
+        value = code_unit->code[0];
+        return value;
+    }
+    if (code_unit->length == 2){
+        value = code_unit->code[0] & 0x1f;
+        // 000x xxxx
+        value = value << 6;
+        value = value | (code_unit->code[1] & 0x3f);
+        // 00xx xxxx
+        return value;
+    }
+    if (code_unit->length == 3){
+        value = code_unit->code[0] & 0x0f;
+        //0000xxxx
+        for (size_t i = 1; i < code_unit->length; i++){
+            value = value << 6;
+            value = value | (0x3f & code_unit->code[i]);
+            //00xx xxxx
+        }
+        return value;
+    }
+    if (code_unit->length == 4){
+        value = code_unit->code[0] & 0x07;
+        //00000xxx
+        for (size_t i = 1; i < code_unit->length; i++){
+            value = value << 6;
+            value = value | (0x3f & code_unit->code[i]);
+        }
+        return value;
+    }
+    return 0;
+}
+
