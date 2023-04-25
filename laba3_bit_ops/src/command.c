@@ -51,7 +51,17 @@ int decode_file(const char *in_file_name, const char *out_file_name)
     }
 
     CodeUnit code_unit;
-    read_next_code_unit(in, &code_unit);
-    decode(&code_unit);
+    uint32_t code_point;
+    while (!feof(in)) {
+        if (!read_next_code_unit(in, &code_unit)) {
+            code_point = decode(&code_unit);
+            if (!feof(in)) {
+                fprintf(out, "%" SCNx32 "\n", code_point);
+            }
+        }
+    }
+
+    fclose(in);
+    fclose(out);
     return 0;
 }
