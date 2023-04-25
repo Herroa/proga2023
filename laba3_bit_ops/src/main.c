@@ -15,10 +15,11 @@ int main(int argc, char *argv[])
 
     if(strcmp(command, "encode") == 0){
         encode_file(in_file_name, out_file_name);
-    }
-    else{
+    }else if(strcmp(command, "decode") == 0) {
+		decode_file(in_file_name, out_file_name);
+    }else{
         printf("Wrong command!\n");
-        return 1;
+        return -1;
     }
 
 
