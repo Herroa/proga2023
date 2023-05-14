@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include <assert.h>
 #include <stdlib.h>
-#define SIZE 10
 
 /*
  * Диапазон             Вероятность
@@ -65,31 +64,50 @@ uint32_t decode_varint(const uint8_t** bufp)
     return value;
 }
 
+size_t file_size(FILE *file)
+{
+    size_t size = 0;
+    fseek(file, 0, SEEK_END);
+    size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+    return size;
+}
+
 int main()
 {
-    FILE *uncompressed;
-    uncompressed = fopen("uncompressed.dat", "wb");
-    uint32_t values[SIZE];
-    for(int i = 0; i<SIZE; i++){
-        values[i] = generate_number();
-    }//fill array
+    FILE *uncompressed = fopen("uncompressed.dat", "wb");
+    FILE *compressed = fopen("compressed.dat", "wb");
 
-    fwrite(values,sizeof(uint32_t),SIZE,uncompressed);
-    //write file
+    for (int i = 0; i < 1000; i++) {
+        uint8_t buf[4] = {0};
+        uint32_t num = generate_number();
+        size_t e_size = encode_varint(num, buf);
+        fwrite(&num, 4, 1, uncompressed);
+        fwrite(buf, 1, e_size, compressed);
+    }
+
+    fclose(compressed);
     fclose(uncompressed);
 
+    uncompressed = fopen("uncompressed.dat", "rb");
+    compressed = fopen("compressed.dat", "rb");
+    uint32_t num;
+    size_t compressed_size = file_size(compressed); 
+    uint8_t *buf = malloc(sizeof(uint8_t) * compressed_size);
+    uint8_t *buf_free = buf;
 
-    FILE *compressed;
-
-    compressed = fopen("compressed.dat","wb");
-
-    uint8_t buf[4];
-    size_t size = 0;
-
-    for (int i = 0; i<SIZE;i++){
-        size = encode_varint(values[i], buf);
-        fwrite(buf,sizeof(uint8_t),size,compressed);
+    for (size_t i = 0; i < compressed_size; i++) {
+        fread(buf + i, 1, 1, compressed);
     }
+
+    while (fread(&num, sizeof(int), 1, uncompressed)) {
+        assert(num == decode_varint((const uint8_t **)&buf) && "Error: num != decode");
+    }
+
+    double com_ratio = (double)file_size(compressed) / (double)file_size(uncompressed);
+    printf("compression ratio - %lf\n", com_ratio);
+
     fclose(compressed);
-    return 0;
+    fclose(uncompressed);
+    free(buf_free);
 }
