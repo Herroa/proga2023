@@ -19,7 +19,7 @@ void badCharHeuristic(char *str, int size, int badchar[NO_OF_CHARS])
 
 int boyer_mur(char *txt, char *pat)
 {
-    int count=0;
+    int count = 0;
     int m = strlen(pat);
     int n = strlen(txt);
 
@@ -66,28 +66,35 @@ int boyer_mur(char *txt, char *pat)
             character. */
             shift += max(1, j - badchar[(int)txt[shift + j]]);
     }
+
     return count;
 }
 
 void check_file(const char *file, char *substring)
 {
-    char *string = malloc(sizeof(char)*256);//240
+    char *string = malloc(sizeof(char) * 256); // 240
     FILE *in = fopen(file, "r");
-    printf("In file %s:\n",file);
-    int line=1; int count = 0;
-    while(!feof(in))
+    printf("In file '%s':\n", file);
+    int line = 1;
+    int count = 0;
+    int file_count = 0;
+    while (!feof(in))
     {
-        printf("On line %d:\n",line);
-        fscanf(in, "%s",string);
-        count += boyer_mur(string, substring);
+        fscanf(in, "%s", string);
+        count = boyer_mur(string, substring);
+        if (count != 0)
+        {
+            printf("On line(%d) found %d occurs\n", line, count);
+        }
+        file_count += count;
         line++;
     }
-    printf("counter occurs: %d\n",count);
+    printf("total occurs in file: %d\n", file_count);
     free(string);
 }
 
 int main()
 {
-    check_file("test2.txt","ABBC");
+    check_file("test", "ABBC");
     return 0;
 }
