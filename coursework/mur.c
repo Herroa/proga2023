@@ -71,10 +71,15 @@ int boyer_mur(char *txt, char *pat)
     return count;
 }
 
-void check_file(const char *file, char *substring)
+int check_file(const char *file, char *substring)
 {
     char *string = malloc(sizeof(char) * 256); // 240
     FILE *in = fopen(file, "r");
+    if (!in)
+    {
+        printf("Can't open file!\n");
+        return 1;
+    }
     printf("In file '%s':\n", file);
     int line = 1;
     int count = 0;
@@ -92,27 +97,38 @@ void check_file(const char *file, char *substring)
     }
     printf("total occurs in file: %d\n", file_count);
     free(string);
+    return 0;
 }
 
-int main()
+int check_this_dir(char *template,char *substring)
 {
-    char *substring = "ABBC";
-    DIR * dp = opendir(".");
-    if ( ! dp ) {
-        fprintf(stderr, "Can't open current directory!\n");
+    DIR *dp = opendir(".");
+    if (!dp)
+    {
+        printf("Can't open current directory!\n");
         return 1;
     }
- 
-    struct dirent * de;
-    while ( ( de = readdir(dp) ) ) {
-        size_t nlen = strlen(de->d_name);
-        if (strcmp((de->d_name),".") != 0 && strcmp((de->d_name),"..") && strcmp((de->d_name),"main")){
+
+    struct dirent *de;
+    while ((de = readdir(dp)))
+    {
+        int tlen = strlen(template);
+        int nlen = strlen(de->d_name);
+        if (strcmp(((de->d_name) + nlen - tlen), template) == 0)
+        {
             printf("%s\n", de->d_name);
             check_file(de->d_name, substring);
         }
     }
     closedir(dp);
+    return 0;
+}
 
+int main()
+{
+    char *substring = "ABBC";
+    char *template = ".txt";
+    check_this_dir(template,substring);
 
     return 0;
 }
