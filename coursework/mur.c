@@ -74,11 +74,11 @@ int boyer_mur(char *txt, char *pat)
 
 int check_file(const char *file, char *substring)
 {
-    char *string = malloc(sizeof(char) * 256); // 240
+    char *string = malloc(sizeof(char) * 256000); // 240 in txt
     FILE *in = fopen(file, "r");
     if (!in)
     {
-        printf("Can't open file!\n");
+        printf("Can't open file: %s!\n",file);
         return 1;
     }
     printf("In file '%s':\n", file);
@@ -96,7 +96,7 @@ int check_file(const char *file, char *substring)
         file_count += count;
         line++;
     }
-    printf("total occurs in file: %d\n", file_count);
+    printf("total occurs in file: %d\n\n", file_count);
     free(string);
     return 0;
 }
@@ -125,6 +125,16 @@ int check_this_dir(char *template, char *substring)
     return 0;
 }
 
+int check_template(char *filename,char *template)
+{
+    int nlen = strlen(filename);
+    int tlen = strlen(template);
+    if(strcmp(filename+nlen-tlen,template)==0){
+            return 1;
+    }
+    return 0;
+}
+
 void nextdir(char folder[256],char *substring,char *template)
 {
     DIR *dfd;
@@ -132,7 +142,7 @@ void nextdir(char folder[256],char *substring,char *template)
     printf("Открытие папки %s \n", folder);
     struct dirent *dp;
     while ((dp = readdir(dfd)) != NULL)
-        if (dp->d_type != 4){
+        if (dp->d_type != 4 && check_template(dp->d_name,template)){
             check_file(dp->d_name,substring);
             // printf("%s\n", dp->d_name);
         }
