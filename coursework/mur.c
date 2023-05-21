@@ -140,7 +140,7 @@ int check_template(char *filename,char *template)
     }
     int j=strlen(template);
     int k=strlen(filename);
-    while(template[j]!='*'&&j>0)
+    while(template[j]!='*'&&j>0&&template[j]!='.')
     {
         // printf("%c - %c\n",filename[k],template[j]);
         if(filename[k]!=template[j])
@@ -175,7 +175,7 @@ void nextdir(char folder[256],char *substring,char *template)
 int main(int argc, char **argv)
 {
     char *substring = "ABBC";
-    char *template = "t*.txt";
+    char *template = "t.txt";
     // check_this_dir(template, substring);
     char filename[256];
     if (argc < 2)
