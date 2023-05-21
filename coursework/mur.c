@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
+#include <sys/stat.h>
 
 #define NO_OF_CHARS 256
 
@@ -100,7 +101,7 @@ int check_file(const char *file, char *substring)
     return 0;
 }
 
-int check_this_dir(char *template,char *substring)
+int check_this_dir(char *template, char *substring)
 {
     DIR *dp = opendir(".");
     if (!dp)
@@ -124,11 +125,38 @@ int check_this_dir(char *template,char *substring)
     return 0;
 }
 
-int main()
+void nextdir(char folder[256],char *substring,char *template)
+{
+    DIR *dfd;
+    dfd = opendir(folder);
+    printf("Открытие папки %s \n", folder);
+    struct dirent *dp;
+    while ((dp = readdir(dfd)) != NULL)
+        if (dp->d_type != 4){
+            check_file(dp->d_name,substring);
+            // printf("%s\n", dp->d_name);
+        }
+        else if ((dp->d_type == 4) && ((strcmp(dp->d_name, ".") != 0) && (strcmp(dp->d_name, "..") != 0)))
+        {
+            folder = strcat(folder, "/");
+            nextdir(strcat(folder, dp->d_name),substring,template);
+        }
+    closedir(dfd);
+}
+
+int main(int argc, char **argv)
 {
     char *substring = "ABBC";
     char *template = ".txt";
-    check_this_dir(template,substring);
+    // check_this_dir(template, substring);
+    char filename[256];
+    if (argc < 2)
+        strcpy(filename, ".");
+    else
+        strcpy(filename, argv[1]);
+    printf("Корневой каталог %s\n\n", filename);
+    nextdir(filename,substring,template);
 
     return 0;
 }
+
