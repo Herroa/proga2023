@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <dirent.h>
 
 #define NO_OF_CHARS 256
 
@@ -95,6 +96,23 @@ void check_file(const char *file, char *substring)
 
 int main()
 {
-    check_file("test", "ABBC");
+    char *substring = "ABBC";
+    DIR * dp = opendir(".");
+    if ( ! dp ) {
+        fprintf(stderr, "Can't open current directory!\n");
+        return 1;
+    }
+ 
+    struct dirent * de;
+    while ( ( de = readdir(dp) ) ) {
+        size_t nlen = strlen(de->d_name);
+        if (strcmp((de->d_name),".") != 0 && strcmp((de->d_name),"..") && strcmp((de->d_name),"main")){
+            printf("%s\n", de->d_name);
+            check_file(de->d_name, substring);
+        }
+    }
+    closedir(dp);
+
+
     return 0;
 }
