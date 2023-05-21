@@ -101,30 +101,6 @@ int check_file(const char *file, char *substring)
     return 0;
 }
 
-int check_this_dir(char *template, char *substring)
-{
-    DIR *dp = opendir(".");
-    if (!dp)
-    {
-        printf("Can't open current directory!\n");
-        return 1;
-    }
-
-    struct dirent *de;
-    while ((de = readdir(dp)))
-    {
-        int tlen = strlen(template);
-        int nlen = strlen(de->d_name);
-        if (strcmp(((de->d_name) + nlen - tlen), template) == 0)
-        {
-            printf("%s\n", de->d_name);
-            check_file(de->d_name, substring);
-        }
-    }
-    closedir(dp);
-    return 0;
-}
-
 int check_template(char *filename,char *template)
 {
     int tlen = strlen(template);
@@ -153,6 +129,29 @@ int check_template(char *filename,char *template)
     return 1;
 }
 
+int check_this_dir(char *template, char *substring)
+{
+    DIR *dp = opendir(".");
+    if (!dp)
+    {
+        printf("Can't open current directory!\n");
+        return 1;
+    }
+
+    struct dirent *de;
+    while ((de = readdir(dp)))
+    {
+        if (check_template(de->d_name,template))
+        {
+            printf("%s\n", de->d_name);
+            check_file(de->d_name, substring);
+        }
+    }
+    closedir(dp);
+    return 0;
+}
+
+
 void nextdir(char folder[256],char *substring,char *template)
 {
     DIR *dfd;
@@ -176,14 +175,14 @@ int main(int argc, char **argv)
 {
     char *substring = "ABBC";
     char *template = "t.txt";
-    // check_this_dir(template, substring);
-    char filename[256];
-    if (argc < 2)
-        strcpy(filename, ".");
-    else
-        strcpy(filename, argv[1]);
-    printf("Корневой каталог %s\n\n", filename);
-    nextdir(filename,substring,template);
+    check_this_dir(template, substring);
+    // char filename[256];
+    // if (argc < 2)
+    //     strcpy(filename, ".");
+    // else
+    //     strcpy(filename, argv[1]);
+    // printf("Корневой каталог %s\n\n", filename);
+    // nextdir(filename,substring,template);
 
     return 0;
 }
