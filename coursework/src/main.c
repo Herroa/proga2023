@@ -1,5 +1,5 @@
 #include "mur.h"
-#include "dir_processing.h"
+#include "dir.h"
 #include <stdio.h>
 #include <string.h>
 

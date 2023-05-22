@@ -1,4 +1,4 @@
-#include "dir_processing.h"
+#include "dir.h"
 #include "mur.h"
 #include <dirent.h>
 #include <stdlib.h>
