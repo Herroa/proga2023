@@ -78,7 +78,7 @@ int check_template(char *filename, char *template)
     return 1;
 }
 
-void nextdir(char folder[256], char *template)
+void nextdir(char *template, char *folder)
 {
     DIR *dfd;
     dfd = opendir(folder);
@@ -92,21 +92,41 @@ void nextdir(char folder[256], char *template)
         else if ((dp->d_type == 4) && ((strcmp(dp->d_name, ".") != 0) && (strcmp(dp->d_name, "..") != 0)))
         {
             folder = strcat(folder, "/");
-            nextdir(strcat(folder, dp->d_name), template);
+            nextdir(template, strcat(folder, dp->d_name));
         }
     closedir(dfd);
 }
 
 int main(int argc, char **argv)
 {
-    char *template = "*.c";
-    char filename[256];
-    if (argc < 2)
-        strcpy(filename, ".");
+    if (strcmp(argv[1], "-r") == 0)
+    {
+        if (argc < 4)
+        {
+            printf("Not enough arguments");
+        }
+        else
+        {
+            char *template = argv[2];
+            char *folder = argv[3];
+            nextdir(template, folder);
+        }
+    }
     else
-        strcpy(filename, argv[1]);
-    printf("Root dir %s\n\n", filename);
-    nextdir(filename,template);
+    {
+        if (argc < 3)
+        {
+            printf("Not enough argumetns)");
+        }
+        else
+        {
+            char *template = argv[1];
+            char *folder = argv[2];
+            // nextdir(template, folder);
+            //not recursive
+        }
+    }
+
 
     return 0;
 }
