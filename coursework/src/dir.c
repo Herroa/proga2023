@@ -38,6 +38,7 @@ int nextdir(char *template, char *path)
         }
     }
     closedir(dir);
+    free(temp);
     return 0;
 }
 
@@ -55,7 +56,7 @@ int thisdir(char *template, char *path)
     char temp[len + 1];
     strcpy(temp, path);
 
-    printf("Open dir '%s'\n", path);
+    printf("Open directory '%s'\n", path);
     while ((dp = readdir(dir)) != 0)
     {
         if (dp->d_type != 4 && strcmp(dp->d_name,"bmatcher")!=0)
