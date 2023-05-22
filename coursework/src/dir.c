@@ -5,47 +5,57 @@
 #include <string.h>
 #include <stdio.h>
 
-void nextdir(char *template, char *path)
+int nextdir(char *template, char *path)
 {
-    DIR *dfd;
-    dfd = opendir(path);
-    printf("Open directory '%s': \n", path);
+    DIR *dir;
     struct dirent *dp;
-    
-    while ((dp = readdir(dfd)) != NULL){
-        if (dp->d_type != 4)
+    char *temp=malloc(sizeof(char)*255);
+    int flag;
+    flag = thisdir(template,path);
+    if(flag==1)
+    {
+        return 1;
+    }
+    dir = opendir(path);
+    if (dir == NULL)
+    {
+        printf("Cant open directory!\n");
+        return 1;
+    }
+    while ((dp = readdir(dir)) != NULL){
+        if (dp->d_type == DT_DIR && strcmp(dp->d_name, "..") != 0 && strcmp(dp->d_name, ".") != 0)
         {
-            printf("\t%s\n", dp->d_name);
-            strcat(path,"/");
-            strcat(path,dp->d_name);
-            check_file(template,path);
-        }
-        else if ((dp->d_type == 4) && ((strcmp(dp->d_name, ".") != 0) && (strcmp(dp->d_name, "..") != 0)))
-        {
+            int length = strlen(dp->d_name);
+            char cur_dir[length];
             
-            path = strcat(path, "/");
-            path = strcat(path, dp->d_name);
-            nextdir(template, path);
-            memset(path, 0, strlen(path));
-            // path = strcat(path, ".");
+            strcpy(cur_dir,dp->d_name);
+            strcpy(temp, path);
+            strcat(temp, "/");
+            strcat(temp, cur_dir);
+            nextdir(template, temp);
+            memset(temp, 0, strlen(temp));
         }
     }
-    printf("Close directory '%s': \n", path);
-    closedir(dfd);
+    closedir(dir);
+    return 0;
 }
 
-void thisdir(char *template, char *path)
+int thisdir(char *template, char *path)
 {
-    DIR *dfd;
+    DIR *dir;
     struct dirent *dp;
-    dfd = opendir(path);
-
+    dir = opendir(path);
+    if (dir == NULL)
+    {
+        printf("Cant open directory!\n");
+        return 1;
+    }
     int len = strlen(path);
     char temp[len+1];
     strcpy(temp,path);
 
     printf("Open dir '%s'\n", path);
-    while ((dp = readdir(dfd)) != NULL){
+    while ((dp = readdir(dir)) != NULL){
         if (dp->d_type != 4)
         {   
             path = malloc(255 * sizeof(char));
@@ -56,13 +66,14 @@ void thisdir(char *template, char *path)
             free(path);
         }
     }
-    closedir(dfd);
+    closedir(dir);
     printf("^^^\n");
+    return 0;
 }
 
 int check_file(char *template, const char *path)
 {
-    char *string = malloc(sizeof(char) * 256000); // 240 in txt
+    char *string = malloc(sizeof(char) * 255); // 240 in txt
     FILE *in = fopen(path, "r");
     if (!in)
     {
@@ -73,6 +84,7 @@ int check_file(char *template, const char *path)
     int line = 1;
     int count = 0;
     int file_count = 0;
+
     while (!feof(in))
     {
         fscanf(in, "%s", string);
