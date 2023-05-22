@@ -50,42 +50,15 @@ int boyer_mur(char *txt, char *pat)
     return count;
 }
 
-int check_template(char *filename, char *template)
-{
-    int tlen = strlen(template);
-    int i = 0;
-    while (template[i] != '*' && (i < tlen) && template[i] != '.')
-    {
-        // printf("%c - %c\n",filename[i],template[i]);
-        if (filename[i] != template[i])
-        {
-            return 0;
-        }
-        i++;
-    }
-    int j = strlen(template);
-    int k = strlen(filename);
-    while (template[j] != '*' && j > 0 && template[j] != '.')
-    {
-        // printf("%c - %c\n",filename[k],template[j]);
-        if (filename[k] != template[j])
-        {
-            return 0;
-        }
-        j--;
-        k--;
-    }
-    return 1;
-}
-
 void nextdir(char *template, char *folder)
 {
+
     DIR *dfd;
     dfd = opendir(folder);
     printf("Open dir %s \n", folder);
     struct dirent *dp;
-    while ((dp = readdir(dfd)) != NULL)
-        if (dp->d_type != 4 && check_template(dp->d_name, template))
+    while ((dp = readdir(dfd)) != NULL){
+        if (dp->d_type != 4 && boyer_mur(dp->d_name, template)!=0)
         {
             printf("%s\n", dp->d_name);
         }
@@ -94,35 +67,55 @@ void nextdir(char *template, char *folder)
             folder = strcat(folder, "/");
             nextdir(template, strcat(folder, dp->d_name));
         }
+    }
     closedir(dfd);
+}
+
+void thisdir(char *template, char *folder)
+{
+    DIR *dfd;
+    dfd = opendir(folder);
+    printf("Open dir %s \n", folder);
+    struct dirent *dp;
+    while ((dp = readdir(dfd)) != NULL){
+        if (dp->d_type != 4 && boyer_mur(dp->d_name, template)!=0)
+        {
+            printf("%s\n", dp->d_name);
+        }
+    }
 }
 
 int main(int argc, char **argv)
 {
+    char *template;
+    char *folder;
     if (strcmp(argv[1], "-r") == 0)
     {
         if (argc < 4)
         {
             printf("Not enough arguments");
+            return -1;
         }
         else
         {
-            char *template = argv[2];
-            char *folder = argv[3];
+            template = argv[2];
+            folder = argv[3];
             nextdir(template, folder);
+            //recursive
         }
     }
     else
     {
         if (argc < 3)
         {
-            printf("Not enough argumetns)");
+            printf("Not enough argumetns");
+            return -1;
         }
         else
         {
-            char *template = argv[1];
-            char *folder = argv[2];
-            // nextdir(template, folder);
+            template = argv[1];
+            folder = argv[2];
+            thisdir(template, folder);
             //not recursive
         }
     }
