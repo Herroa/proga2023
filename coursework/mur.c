@@ -38,7 +38,7 @@ int boyer_mur(char *txt, char *pat)
 
         if (j < 0)
         {
-            printf("pattern occurs at shift = %d\n", shift);
+            printf("Pattern occurs at shift = %d\n", shift);
             count++;
 
             shift += (shift + m < n) ? m - badchar[(int)txt[shift + m]] : 1;
@@ -48,35 +48,6 @@ int boyer_mur(char *txt, char *pat)
     }
 
     return count;
-}
-
-int check_file(const char *file, char *substring)
-{
-    char *string = malloc(sizeof(char) * 256000); // 240 in txt
-    FILE *in = fopen(file, "r");
-    if (!in)
-    {
-        printf("Can't open file: %s!\n", file);
-        return 1;
-    }
-    printf("In file '%s':\n", file);
-    int line = 1;
-    int count = 0;
-    int file_count = 0;
-    while (!feof(in))
-    {
-        fscanf(in, "%s", string);
-        count = boyer_mur(string, substring);
-        if (count != 0)
-        {
-            printf("On line(%d) found %d occurs\n", line, count);
-        }
-        file_count += count;
-        line++;
-    }
-    printf("total occurs in file: %d\n\n", file_count);
-    free(string);
-    return 0;
 }
 
 int check_template(char *filename, char *template)
@@ -107,60 +78,35 @@ int check_template(char *filename, char *template)
     return 1;
 }
 
-int check_this_dir(char *template, char *substring)
-{
-    DIR *dp = opendir(".");
-    if (!dp)
-    {
-        printf("Can't open current directory!\n");
-        return 1;
-    }
-
-    struct dirent *de;
-    while ((de = readdir(dp)))
-    {
-        if (check_template(de->d_name, template))
-        {
-            printf("%s\n", de->d_name);
-            check_file(de->d_name, substring);
-        }
-    }
-    closedir(dp);
-    return 0;
-}
-
-void nextdir(char folder[256], char *substring, char *template)
+void nextdir(char folder[256], char *template)
 {
     DIR *dfd;
     dfd = opendir(folder);
-    printf("Открытие папки %s \n", folder);
+    printf("Open dir %s \n", folder);
     struct dirent *dp;
     while ((dp = readdir(dfd)) != NULL)
         if (dp->d_type != 4 && check_template(dp->d_name, template))
         {
-            check_file(dp->d_name, substring);
-            // printf("%s\n", dp->d_name);
+            printf("%s\n", dp->d_name);
         }
         else if ((dp->d_type == 4) && ((strcmp(dp->d_name, ".") != 0) && (strcmp(dp->d_name, "..") != 0)))
         {
             folder = strcat(folder, "/");
-            nextdir(strcat(folder, dp->d_name), substring, template);
+            nextdir(strcat(folder, dp->d_name), template);
         }
     closedir(dfd);
 }
 
 int main(int argc, char **argv)
 {
-    char *substring = "ABBC";
-    char *template = "t.txt";
-    check_this_dir(template, substring);
-    // char filename[256];
-    // if (argc < 2)
-    //     strcpy(filename, ".");
-    // else
-    //     strcpy(filename, argv[1]);
-    // printf("Корневой каталог %s\n\n", filename);
-    // nextdir(filename,substring,template);
+    char *template = "*.c";
+    char filename[256];
+    if (argc < 2)
+        strcpy(filename, ".");
+    else
+        strcpy(filename, argv[1]);
+    printf("Root dir %s\n\n", filename);
+    nextdir(filename,template);
 
     return 0;
 }
