@@ -37,15 +37,26 @@ void nextdir(char *template, char *path)
 void thisdir(char *template, char *path)
 {
     DIR *dfd;
-    dfd = opendir(path);
-    printf("Open dir %s \n", path);
     struct dirent *dp;
+    dfd = opendir(path);
+
+    int len = strlen(path);
+    char temp[len+1];
+    strcpy(temp,path);
+
+    printf("Open dir '%s'\n", path);
     while ((dp = readdir(dfd)) != NULL){
         if (dp->d_type != 4)
-        {
-            check_file(template,dp->d_name);
+        {   
+            path = malloc(255 * sizeof(char));
+            strcpy(path, temp);
+            strcat(path, "/");
+            strcat(path, dp->d_name);
+            check_file(template,path);
+            free(path);
         }
     }
+    closedir(dfd);
     printf("^^^\n");
 }
 
