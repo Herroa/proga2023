@@ -1,8 +1,13 @@
-run: main
-	./main
+SRC_DIR = src
+SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
+APP_NAME = bmatcher
+GDB = gdbtest
 
-main: test.c
-	gcc -Wall test.c -o main
+COMP = gcc
+CFLAGS = -Wall -o
+
+create:
+	$(COMP) $(SRC_FILES) $(CFLAGS) $(APP_NAME)
 
 clean:
-	rm -rf main
+	rm $(APP_NAME)
