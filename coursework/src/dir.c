@@ -92,7 +92,7 @@ int check_file(char *template, const char *path)
         count = boyer_mur(string, template);
         if (count != 0)
         {
-            printf("On line(%d) found %d occurs\n", line, count);
+            printf("On line(%d) found %d matches\n", line, count);
         }
         file_count += count;
         line++;

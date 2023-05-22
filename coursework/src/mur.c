@@ -34,6 +34,7 @@ int boyer_mur(char *txt, char *pat)
 
         if (j < 0)
         {
+            printf("Find occurs at shift %d\n",shift);
             count++;
             shift += (shift + m < n) ? m - badchar[(int)txt[shift + m]] : 1;
         }
