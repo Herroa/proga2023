@@ -11,7 +11,7 @@ int main(int argc, char **argv)
     {
         if (argc < 4)
         {
-            printf("Not enough arguments");
+            printf("Not enough arguments\nExample:\n ./bmatcher -r '.txt' .\n");
             return -1;
         }
         else
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     {
         if (argc < 3)
         {
-            printf("Not enough argumetns");
+            printf("Not enough arguments\nExample:\n ./bmatcher -r '.txt' .\n");
             return -1;
         }
         else
