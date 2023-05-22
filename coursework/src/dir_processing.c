@@ -13,11 +13,9 @@ void nextdir(char *template, char *folder)
     printf("Open dir '%s': \n", folder);
     struct dirent *dp;
     while ((dp = readdir(dfd)) != NULL){
-        int count = 0;
         if (boyer_mur(dp->d_name, template)!=0)
         {
             printf("-%s\n", dp->d_name);
-            count++;
         }
         else if ((dp->d_type == 4) && ((strcmp(dp->d_name, ".") != 0) && (strcmp(dp->d_name, "..") != 0)))
         {
