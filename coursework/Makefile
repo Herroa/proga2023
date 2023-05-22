@@ -7,7 +7,7 @@ COMP = gcc
 CFLAGS = -Wall -o
 
 create:
-	$(COMP) $(SRC_FILES) $(CFLAGS) $(APP_NAME)
+	$(COMP) $(SRC_FILES) -g $(CFLAGS) $(APP_NAME)
 
 clean:
 	rm $(APP_NAME)
