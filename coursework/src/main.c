@@ -11,14 +11,14 @@ int main(int argc, char **argv)
     {
         if (argc < 4)
         {
-            printf("Not enough arguments\nExample:\n ./bmatcher -r '.txt' .\n");
+            printf("Not enough arguments\nExample:\n ./bmatcher -r 'ABBA' .\n");
             return -1;
         }
         else
         {
             template = argv[2];
             folder = argv[3];
-            nextdir(template, folder, 0);
+            nextdir(template, folder);
             //recursive
         }
     }
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     {
         if (argc < 3)
         {
-            printf("Not enough arguments\nExample:\n ./bmatcher -r '.txt' .\n");
+            printf("Not enough arguments\nExample:\n ./bmatcher -r 'ABBA' .\n");
             return -1;
         }
         else
