@@ -18,7 +18,7 @@ int main(int argc, char **argv)
         {
             template = argv[2];
             folder = argv[3];
-            nextdir(template, folder);
+            nextdir(template, folder, 0);
             //recursive
         }
     }
