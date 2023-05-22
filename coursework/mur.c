@@ -38,7 +38,7 @@ int boyer_mur(char *txt, char *pat)
 
         if (j < 0)
         {
-            printf("Pattern occurs at shift = %d\n", shift);
+            // printf("Pattern occurs at shift = %d\n", shift);
             count++;
 
             shift += (shift + m < n) ? m - badchar[(int)txt[shift + m]] : 1;
@@ -58,7 +58,7 @@ void nextdir(char *template, char *folder)
     printf("Open dir %s \n", folder);
     struct dirent *dp;
     while ((dp = readdir(dfd)) != NULL){
-        if (dp->d_type != 4 && boyer_mur(dp->d_name, template)!=0)
+        if (boyer_mur(dp->d_name, template)!=0)
         {
             printf("%s\n", dp->d_name);
         }
@@ -78,7 +78,7 @@ void thisdir(char *template, char *folder)
     printf("Open dir %s \n", folder);
     struct dirent *dp;
     while ((dp = readdir(dfd)) != NULL){
-        if (dp->d_type != 4 && boyer_mur(dp->d_name, template)!=0)
+        if (boyer_mur(dp->d_name, template)!=0)
         {
             printf("%s\n", dp->d_name);
         }
