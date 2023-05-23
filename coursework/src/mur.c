@@ -5,14 +5,14 @@
 
 int max(int a, int b) { return (a > b) ? a : b; }
 
-void stop_symb_heuristic(char *str, int size, int badchar[NO_OF_CHARS])
+void stop_symb_heuristic(char *str, int size, int stopchar[NO_OF_CHARS])
 {
     int i;
     for (i = 0; i < NO_OF_CHARS; i++)
-        badchar[i] = -1;
+        stopchar[i] = -1;
 
     for (i = 0; i < size; i++)
-        badchar[(int)str[i]] = i;
+        stopchar[(int)str[i]] = i;
 }
 
 int boyer_mur(char *txt, char *pat)
@@ -21,9 +21,9 @@ int boyer_mur(char *txt, char *pat)
     int m = strlen(pat);
     int n = strlen(txt);
 
-    int badchar[NO_OF_CHARS];
+    int stopchar[NO_OF_CHARS];
 
-    stop_symb_heuristic(pat, m, badchar);
+    stop_symb_heuristic(pat, m, stopchar);
 
     int shift = 0;
     while (shift <= (n - m))
@@ -36,10 +36,10 @@ int boyer_mur(char *txt, char *pat)
         {
             printf("Find occurs at shift %d\n",shift);
             count++;
-            shift += (shift + m < n) ? m - badchar[(int)txt[shift + m]] : 1;
+            shift += (shift + m < n) ? m - stopchar[(int)txt[shift + m]] : 1;
         }
         else
-            shift += max(1, j - badchar[(int)txt[shift + j]]);
+            shift += max(1, j - stopchar[(int)txt[shift + j]]);
     }
 
     return count;
