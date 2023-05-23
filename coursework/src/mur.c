@@ -5,7 +5,7 @@
 
 int max(int a, int b) { return (a > b) ? a : b; }
 
-void badCharHeuristic(char *str, int size, int badchar[NO_OF_CHARS])
+void stop_symb_heuristic(char *str, int size, int badchar[NO_OF_CHARS])
 {
     int i;
     for (i = 0; i < NO_OF_CHARS; i++)
@@ -23,7 +23,7 @@ int boyer_mur(char *txt, char *pat)
 
     int badchar[NO_OF_CHARS];
 
-    badCharHeuristic(pat, m, badchar);
+    stop_symb_heuristic(pat, m, badchar);
 
     int shift = 0;
     while (shift <= (n - m))
