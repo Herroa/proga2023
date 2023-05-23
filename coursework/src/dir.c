@@ -5,13 +5,13 @@
 #include <string.h>
 #include <stdio.h>
 
-int nextdir(char *template, char *path)
+int next_dir(char *template, char *path)
 {
     DIR *dir;
     struct dirent *dp;
     char *temp = malloc(sizeof(char) * 255);
     int flag;
-    flag = thisdir(template, path);
+    flag = this_dir(template, path);
     if (flag == 1)
     {
         return 1;
@@ -33,7 +33,7 @@ int nextdir(char *template, char *path)
             strcpy(temp, path);
             strcat(temp, "/");
             strcat(temp, cur_dir);
-            nextdir(template, temp);
+            next_dir(template, temp);
             memset(temp, 0, strlen(temp));
         }
     }
@@ -42,7 +42,7 @@ int nextdir(char *template, char *path)
     return 0;
 }
 
-int thisdir(char *template, char *path)
+int this_dir(char *template, char *path)
 {
     DIR *dir;
     struct dirent *dp;
@@ -75,7 +75,7 @@ int thisdir(char *template, char *path)
 
 int check_file(char *template, const char *path)
 {
-    char *string = malloc(sizeof(char) * 255); // 240 in txt
+    char *string = malloc(sizeof(char) * 255);
     FILE *in = fopen(path, "r");
     if (!in)
     {
